@@ -12,6 +12,7 @@ class Category:
         self.__products = products
 
         Category.category_count += 1
+        Category.product_count = len(products)
 
     def add_product(self, product):
         self.__products.append(product)
@@ -36,7 +37,6 @@ class Product:
         self.description = description
         self.__price = price
         self.quantity = quantity
-        Category.product_count += 1
 
     @classmethod
     def new_product(cls, params):
