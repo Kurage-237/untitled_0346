@@ -33,7 +33,7 @@ def init_n_products() -> Tuple[list, int]:
 
 
 def test_init_product(init_n_products: Tuple) -> None:
-    assert core.Category.products_count == init_n_products[1]
+    assert core.Category.product_count == init_n_products[1]
     for x in init_n_products[0]:
         assert x.name == "test"
         assert x.description == "test"
