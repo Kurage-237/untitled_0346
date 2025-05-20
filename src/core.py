@@ -1,7 +1,7 @@
 class Category:
     name: str
     description: str
-    products: list
+    __products: list
 
     category_count = 0
     product_count = 0
@@ -9,20 +9,46 @@ class Category:
     def __init__(self, name: str, description: str, products: list):
         self.name = name
         self.description = description
-        self.products = products
+        self.__products = products
 
         Category.category_count += 1
+
+    def add_product(self, product):
+        self.__products.append(product)
+        Category.product_count += 1
+
+    @property
+    def products(self):
+        result = []
+        for x in self.__products:
+            result.append(f"{x.name}, {x.price} руб. Остаток: {x.quantity} шт.")
+        return str(result)
 
 
 class Product:
     name: str
     description: str
-    price: float
+    __price: float
     quantity: int
 
     def __init__(self, name: str, description: str, price: float, quantity: int):
         self.name = name
         self.description = description
-        self.price = price
+        self.__price = price
         self.quantity = quantity
         Category.product_count += 1
+
+    @classmethod
+    def new_product(cls, params):
+        return cls(**params)
+
+    @property
+    def price(self):
+        return self.__price
+
+    @price.setter
+    def price(self, new_price):
+        if new_price <= 0 :
+            print("“Цена не должна быть нулевая или отрицательная”")
+        else:
+            self.__price = new_price
