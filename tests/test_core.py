@@ -3,7 +3,7 @@ from typing import Tuple
 
 import pytest
 
-from src.core import Category, Product
+from src.core import Category, Product, Smartphone, LawnGrass
 
 
 @pytest.fixture
@@ -47,3 +47,20 @@ def test_product_setter_error(capsys):
     captured = capsys.readouterr()
     assert test_product.price == 0.0
     assert captured.out == "“Цена не должна быть нулевая или отрицательная”\n"
+
+def test_product_subclasses():
+    test_product = Smartphone("test1", "test2", 2000.1, 123, 90, "test3", 234.1, "test4")
+    assert test_product.efficiency == 90
+    assert test_product.model == "test3"
+    assert test_product.memory == 234.1
+    assert test_product.color == "test4"
+    test_product = LawnGrass("test1", "test2", 2000.1, 123, "test3", 932.3, "test4")
+    assert test_product.country == "test3"
+    assert test_product.germination_period == 932.3
+    assert test_product.color == "test4"
+
+def test_type_errors():
+    with (pytest.raises(TypeError)):
+        Smartphone("test1", "test2", 2000.1, 123, 90, "test3", 234.1, "test4") + LawnGrass("test1", "test2", 2000.1, 123, "test3", 932.3, "test4")
+    with pytest.raises(TypeError):
+        Category("test1", "test2", []).add_product(Category("test1", "test2", []))

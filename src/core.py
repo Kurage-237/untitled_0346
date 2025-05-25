@@ -21,8 +21,11 @@ class Category:
         return f"{self.name}, количество продуктов: {total_products} шт."
 
     def add_product(self, product):
-        self.__products.append(product)
-        Category.product_count += 1
+        if isinstance(product, Product):
+            self.__products.append(product)
+            Category.product_count += 1
+        else:
+            raise TypeError("Объект должен быть дочерним от класса Product")
 
     @property
     def products(self):
@@ -48,9 +51,12 @@ class Product:
         return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other):
-        a = self.__price * self.quantity
-        b = other.__price * other.quantity
-        return a + b
+        if type(self) == type(other):
+            a = self.__price * self.quantity
+            b = other.__price * other.quantity
+            return a + b
+        else:
+            raise TypeError("Типы продуктов должны быть одинаковыми")
 
     @classmethod
     def new_product(cls, params):
@@ -66,3 +72,26 @@ class Product:
             print("“Цена не должна быть нулевая или отрицательная”")
         else:
             self.__price = new_price
+
+class Smartphone(Product):
+    efficiency: int
+    model: str
+    memory: float
+    color: str
+
+    def __init__(self, name: str, description: str, price: float, quantity: int, efficiency: int, model: str, memory: float, color: str):
+        super().__init__(name, description, price, quantity)
+        self.efficiency = efficiency
+        self.model = model
+        self.memory = memory
+        self.color = color
+
+class LawnGrass(Product):
+    country: str
+    germination_period: float
+    color: str
+    def __init__(self, name: str, description: str, price: float, quantity: int, country: str, germination_period: float, color: str):
+        super().__init__(name, description, price, quantity)
+        self.country = country
+        self.germination_period = germination_period
+        self.color = color
