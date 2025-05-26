@@ -1,3 +1,6 @@
+from abc import ABC, abstractmethod
+
+
 class Category:
     name: str
     description: str
@@ -12,7 +15,7 @@ class Category:
         self.__products = products
 
         Category.category_count += 1
-        Category.product_count = len(products)
+        Category.product_count += len(products)
 
     def __str__(self):
         total_products = 0
@@ -35,7 +38,46 @@ class Category:
         return str(result)
 
 
-class Product:
+class BaseProduct(ABC):
+
+    # noinspection PyUnusedLocal
+    @abstractmethod
+    def __init__(self, name: str, description: str, price: float, quantity: int):
+        pass # pragma: no cover
+
+    @abstractmethod
+    def __str__(self):
+        pass # pragma: no cover
+
+    @abstractmethod
+    def __add__(self, other):
+        pass # pragma: no cover
+
+    @classmethod
+    @abstractmethod
+    def new_product(cls, params):
+        pass # pragma: no cover
+
+    @property
+    @abstractmethod
+    def price(self):
+        pass # pragma: no cover
+
+    @price.setter
+    @abstractmethod
+    def price(self, new_price):
+        pass # pragma: no cover
+
+
+class InitPrintMixin:
+    def __init__(self, *args, **kwargs):
+        print(repr(self))
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}({str(self.__dict__)[1:-1]})"
+
+
+class Product(InitPrintMixin, BaseProduct):
     name: str
     description: str
     __price: float
@@ -46,6 +88,7 @@ class Product:
         self.description = description
         self.__price = price
         self.quantity = quantity
+        super().__init__(name, description, price, quantity)
 
     def __str__(self):
         return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
@@ -73,24 +116,46 @@ class Product:
         else:
             self.__price = new_price
 
+
 class Smartphone(Product):
     efficiency: int
     model: str
     memory: float
     color: str
 
-    def __init__(self, name: str, description: str, price: float, quantity: int, efficiency: int, model: str, memory: float, color: str):
+    def __init__(
+        self,
+        name: str,
+        description: str,
+        price: float,
+        quantity: int,
+        efficiency: int,
+        model: str,
+        memory: float,
+        color: str,
+    ):
         super().__init__(name, description, price, quantity)
         self.efficiency = efficiency
         self.model = model
         self.memory = memory
         self.color = color
 
+
 class LawnGrass(Product):
     country: str
     germination_period: float
     color: str
-    def __init__(self, name: str, description: str, price: float, quantity: int, country: str, germination_period: float, color: str):
+
+    def __init__(
+        self,
+        name: str,
+        description: str,
+        price: float,
+        quantity: int,
+        country: str,
+        germination_period: float,
+        color: str,
+    ):
         super().__init__(name, description, price, quantity)
         self.country = country
         self.germination_period = germination_period

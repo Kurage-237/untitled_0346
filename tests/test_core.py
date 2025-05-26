@@ -46,7 +46,9 @@ def test_product_setter_error(capsys):
     test_product.price = -3.64
     captured = capsys.readouterr()
     assert test_product.price == 0.0
-    assert captured.out == "“Цена не должна быть нулевая или отрицательная”\n"
+    assert "Цена не должна быть нулевая или отрицательная" in captured.out
+    assert "Product('name': 'test1', 'description': 'test2', '_Product__price': 0.0, 'quantity': 23123)" in captured.out
+
 
 def test_product_subclasses():
     test_product = Smartphone("test1", "test2", 2000.1, 123, 90, "test3", 234.1, "test4")
@@ -59,8 +61,11 @@ def test_product_subclasses():
     assert test_product.germination_period == 932.3
     assert test_product.color == "test4"
 
+
 def test_type_errors():
-    with (pytest.raises(TypeError)):
-        Smartphone("test1", "test2", 2000.1, 123, 90, "test3", 234.1, "test4") + LawnGrass("test1", "test2", 2000.1, 123, "test3", 932.3, "test4")
+    with pytest.raises(TypeError):
+        Smartphone("test1", "test2", 2000.1, 123, 90, "test3", 234.1, "test4") + LawnGrass(
+            "test1", "test2", 2000.1, 123, "test3", 932.3, "test4"
+        )
     with pytest.raises(TypeError):
         Category("test1", "test2", []).add_product(Category("test1", "test2", []))
