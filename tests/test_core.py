@@ -28,6 +28,14 @@ def test_init_n_products_inside_test_category(init_n_products_inside_test_catego
     assert test_category.product_count == n
     assert str(test_category) == f"{test_category.name}, количество продуктов: {n*n} шт."
 
+def test_middle_price(init_n_products_inside_test_category):
+    test_category = init_n_products_inside_test_category[0]
+    n = init_n_products_inside_test_category[1]
+
+    assert test_category.middle_price() == n
+    test_category = Category("test1", "test2", [])
+    assert test_category.middle_price() == 0
+
 
 def test_product_init():
     test_product = Product.new_product({"name": "test1", "description": "test2", "price": 3.64, "quantity": 23123})
@@ -69,3 +77,6 @@ def test_type_errors():
         )
     with pytest.raises(TypeError):
         Category("test1", "test2", []).add_product(Category("test1", "test2", []))
+
+    with pytest.raises(ValueError):
+        Product("test1", "test2", 2000.1, 0)
