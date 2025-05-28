@@ -30,6 +30,15 @@ class Category:
         else:
             raise TypeError("Объект должен быть дочерним от класса Product")
 
+    def middle_price(self):
+        price_sum = 0.0
+        try:
+            for x in self.__products:
+                price_sum += x.price
+            return price_sum / len(self.__products)
+        except ZeroDivisionError:
+            return 0
+
     @property
     def products(self):
         result = []
@@ -84,6 +93,8 @@ class Product(InitPrintMixin, BaseProduct):
     quantity: int
 
     def __init__(self, name: str, description: str, price: float, quantity: int):
+        if quantity == 0 :
+            raise ValueError("Товар с нулевым количеством не может быть добавлен")
         self.name = name
         self.description = description
         self.__price = price
